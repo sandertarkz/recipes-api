@@ -1,9 +1,7 @@
 version: '3.8'
-
 services:
   web:
-    build: .
-    container_name: recipes_api
+    image: 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
     ports:
       - "8000:8000"
     environment:

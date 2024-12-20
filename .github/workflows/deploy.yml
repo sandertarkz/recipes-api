@@ -1,0 +1,39 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 401657292421.dkr.ecr.us-east-1.amazonaws.com
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+
+      - name: Build and Push Image
+        run: |
+          docker build -t film-recipes-api:latest .
+          docker tag film-recipes-api:latest 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
+          docker push 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /home/ubuntu/project
+            docker pull 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
+            docker-compose down
+            docker-compose up -d --force-recreate
