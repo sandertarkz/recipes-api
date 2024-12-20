@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: recipes_api
+    ports:
+      - "8000:8000"
+    environment:
+      ENV: production
+    restart: always

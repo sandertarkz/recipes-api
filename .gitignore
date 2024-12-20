@@ -1,0 +1,6 @@
+*.pyc
+lib
+*.zip
+__pycache__
+.env
+venv
