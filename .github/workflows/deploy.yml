@@ -33,7 +33,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd /home/ubuntu/project
+            cd /home/ubuntu/app
             docker pull 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
             docker-compose down
             docker-compose up -d --force-recreate
