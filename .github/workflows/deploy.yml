@@ -12,13 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Login to ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 401657292421.dkr.ecr.us-east-1.amazonaws.com
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry: 401657292421.dkr.ecr.us-east-1.amazonaws.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+          AWS_REGION: us-east-1
 
       - name: Build and Push Image
         run: |
@@ -26,7 +27,7 @@ jobs:
           docker tag film-recipes-api:latest 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
           docker push 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -35,5 +36,5 @@ jobs:
           script: |
             cd /home/ubuntu/app
             docker pull 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
-            docker-compose down
+            docker-compose pull
             docker-compose up -d --force-recreate
