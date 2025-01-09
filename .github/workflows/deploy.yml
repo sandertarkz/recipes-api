@@ -33,7 +33,19 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd /home/ubuntu/app
-            docker pull 401657292421.dkr.ecr.us-east-1.amazonaws.com/film-recipes/api:latest
-            docker-compose down
+            cd /home/ubuntu/project
+
+            # Log in to ECR on EC2 instance using IAM role credentials
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 401657292421.dkr.ecr.us-east-1.amazonaws.com
+
+            # Pull the latest image from ECR
+            docker-compose pull
+
+            # Restart the containers with the updated image
             docker-compose up -d --force-recreate
+
+            # Optional: Remove unused images to save space
+            docker image prune -f
+
+            # Optional: Run database migrations if applicable
+            # docker-compose run web alembic upgrade head
