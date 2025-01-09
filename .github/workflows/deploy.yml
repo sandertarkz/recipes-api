@@ -39,10 +39,10 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 401657292421.dkr.ecr.us-east-1.amazonaws.com
 
             # Pull the latest image from ECR
-            docker-compose pull
+            docker compose pull
 
             # Restart the containers with the updated image
-            docker-compose up -d --force-recreate
+            docker compose up -d --force-recreate
 
             # Optional: Remove unused images to save space
             docker image prune -f
