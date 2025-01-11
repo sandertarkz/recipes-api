@@ -56,12 +56,12 @@ jobs:
             # Optional: Run database migrations if applicable
             # docker-compose run web alembic upgrade head
 
-      - name: Run Database Migrations
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }} # The public IP address of the EC2 instance
-          username: ubuntu
-          key: ${{ secrets.EC2_KEY }} # The private key to connect to the EC2 instance
-          script: |
-            cd /home/ubuntu/app
-            docker compose run web alembic upgrade head
+      # - name: Run Database Migrations
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }} # The public IP address of the EC2 instance
+      #     username: ubuntu
+      #     key: ${{ secrets.EC2_KEY }} # The private key to connect to the EC2 instance
+      #     script: |
+      #       cd /home/ubuntu/app
+      #       docker compose run web alembic upgrade head
