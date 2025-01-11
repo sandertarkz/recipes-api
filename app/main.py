@@ -26,7 +26,10 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Salem! Welcome to my bookstore app!"}
+    return {
+        "message": "Salem! Welcome to my bookstore app!",
+        "env_db_host": os.getenv("DB_HOST")
+        }
 
 
 @app.get("/random-book")

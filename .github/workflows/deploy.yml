@@ -29,11 +29,17 @@ jobs:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST }} # The public IP address of the EC2 instance
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY }} # The private key to connect to the EC2 instance
           script: |
             cd /home/ubuntu/app
+
+            # Create or update the .env file with secrets
+            echo "DB_HOST=${{ secrets.DB_HOST }}" > .env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
 
             # Log in to ECR on EC2 instance using IAM role credentials
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 401657292421.dkr.ecr.us-east-1.amazonaws.com
@@ -49,3 +55,13 @@ jobs:
 
             # Optional: Run database migrations if applicable
             # docker-compose run web alembic upgrade head
+
+      - name: Run Database Migrations
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }} # The public IP address of the EC2 instance
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }} # The private key to connect to the EC2 instance
+          script: |
+            cd /home/ubuntu/app
+            docker compose run web alembic upgrade head
