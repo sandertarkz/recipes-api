@@ -57,7 +57,7 @@
 
 2. **Connect to RDS:**
    ```bash
-   psql --host=expelliarmus.clugm0ueaexa.us-east-1.rds.amazonaws.com --port=5432 --username=postgres --dbname=postgres --password
+   psql --host=db_host --port=5432 --username=postgres --dbname=postgres --password
    ```
 
 3. **Enter Password:**
@@ -71,7 +71,7 @@
 2. **Configure Connection:**
    - Add a new server with the following details:
      - **Name:** `expelliarmus`
-     - **Host:** `expelliarmus.clugm0ueaexa.us-east-1.rds.amazonaws.com`
+     - **Host:** `db_host`
      - **Port:** `5432`
      - **Username:** `postgres`
      - **Password:** `pwd12345`
@@ -228,7 +228,7 @@
    - Click on **"Settings"** > **"Secrets and variables"** > **"Actions"**.
 
 2. **Add Repository Secrets:**
-   - `DB_HOST`: `expelliarmus.clugm0ueaexa.us-east-1.rds.amazonaws.com`
+   - `DB_HOST`: `db_host`
    - `DB_USER`: `postgres`
    - `DB_NAME`: `postgres`
    - `DB_PASSWORD`: `pwd12345`
@@ -382,7 +382,7 @@
 2. **Configure `alembic.ini`:**
    - Set the SQLAlchemy URL using environment variables.
      ```ini
-     sqlalchemy.url = postgresql://postgres:pwd12345@expelliarmus.clugm0ueaexa.us-east-1.rds.amazonaws.com:5432/postgres
+     sqlalchemy.url = postgresql://user:password@host/table_name
      ```
 
 3. **Create Migration Scripts:**
@@ -494,7 +494,7 @@
 - **Check Security Groups and ACLs:** Ensure EC2 can communicate with RDS on port `5432`.
 - **Test Connectivity from EC2:**
   ```bash
-  psql --host=expelliarmus.clugm0ueaexa.us-east-1.rds.amazonaws.com --port=5432 --username=postgres --dbname=postgres
+  psql --host=db_host --port=5432 --username=postgres --dbname=postgres
   ```
 
 ### **c. SSH Connection Issues in GitHub Actions**
