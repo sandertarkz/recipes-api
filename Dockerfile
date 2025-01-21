@@ -1,5 +1,9 @@
 FROM python:3.11-slim
 
+# Set environment variables for Python
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
 # Install build dependencies
