@@ -1,71 +1,14 @@
-import json
-import os
-from typing import Literal, Optional
-from uuid import uuid4
-from fastapi import FastAPI, HTTPException
-import random
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
+from typing import Annotated
+from fastapi import Depends, FastAPI
+from sqlmodel import Session
+from app.database import get_session
+from app.routes import post, user, auth, test
 
 
-class Book(BaseModel):
-    name: str
-    genre: Literal["fiction", "non-fiction"]
-    price: float
-    book_id: Optional[str] = uuid4().hex
-
-
-BOOKS_FILE = "books.json"
-BOOKS = []
-
-if os.path.exists(BOOKS_FILE):
-    with open(BOOKS_FILE, "r") as f:
-        BOOKS = json.load(f)
-
+SessionDep = Annotated[Session, Depends(get_session)]
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {
-        "message": "Salem! Welcome to my bookstore app!",
-        "env_db_host": os.getenv("DB_HOST"),
-        }
-
-
-@app.get("/random-book")
-async def random_book():
-    return random.choice(BOOKS)
-
-
-@app.get("/list-books")
-async def list_books():
-    return {"books": BOOKS}
-
-
-@app.get("/book_by_index/{index}")
-async def book_by_index(index: int):
-    if index < len(BOOKS):
-        return BOOKS[index]
-    else:
-        raise HTTPException(404, f"Book index {index} out of range ({len(BOOKS)}).")
-
-
-@app.post("/add-book")
-async def add_book(book: Book):
-    book.book_id = uuid4().hex
-    json_book = jsonable_encoder(book)
-    BOOKS.append(json_book)
-
-    with open(BOOKS_FILE, "w") as f:
-        json.dump(BOOKS, f)
-
-    return {"book_id": book.book_id}
-
-
-@app.get("/get-book")
-async def get_book(book_id: str):
-    for book in BOOKS:
-        if book.book_id == book_id:
-            return book
-
-    raise HTTPException(404, f"Book ID {book_id} not found in database.")
+app.include_router(auth.router)
+app.include_router(user.router)
+app.include_router(post.router)
+app.include_router(test.router)
