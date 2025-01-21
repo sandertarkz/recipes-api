@@ -28,7 +28,10 @@ app = FastAPI()
 async def root():
     return {
         "message": "Salem! Welcome to my bookstore app!",
-        "env_db_host": os.getenv("DB_HOST")
+        "env_db_host": os.getenv("DB_HOST"),
+        "env_db_user": os.getenv("DB_USER"),
+        "env_db_name": os.getenv("DB_NAME"),
+        "env_db_password": os.getenv("DB_PASSWORD"),
         }
 
 
