@@ -13,7 +13,7 @@ SessionDep = Annotated[Session, Depends(get_session)]
 router = APIRouter(tags=["Auth"])
 
 
-@router.post("/login/", response_model=Token)
+@router.post("/login", response_model=Token)
 def create_user(user_credentials: UserLogin, session: SessionDep):
     statement = select(User).where(User.username == user_credentials.username)
     user = session.exec(statement).first()

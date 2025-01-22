@@ -11,7 +11,7 @@ SessionDep = Annotated[Session, Depends(get_session)]
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.post("/", response_model=UserPublic)
+@router.post("", response_model=UserPublic)
 def create_user(user: UserCreate, session: SessionDep):
     hashed_password = hash_password(user.password)
     user.password = hashed_password

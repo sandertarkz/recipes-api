@@ -17,7 +17,7 @@ CurrentUserDep = Annotated[TokenData, Depends(get_current_user)]
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
-@router.post("/", response_model=PostPublic)
+@router.post("", response_model=PostPublic)
 def create_post(
     post: PostCreate,
     session: SessionDep,
@@ -30,7 +30,7 @@ def create_post(
     return post_db
 
 
-@router.get("/", response_model=List[PostPublic])
+@router.get("", response_model=List[PostPublic])
 def get_posts(
     session: SessionDep,
     limit: int = 10,
@@ -104,7 +104,7 @@ def update_post(
     return post
 
 
-@router.post("/{id}/rate/", response_model=PostPublic)
+@router.post("/{id}/rate", response_model=PostPublic)
 def rate_post(
     id: int,
     rating: int,
