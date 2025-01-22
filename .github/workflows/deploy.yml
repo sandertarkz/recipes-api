@@ -57,11 +57,6 @@ jobs:
             # Restart the containers with the updated image
             docker compose up -d --force-recreate
 
-            # Optional: Remove unused images to save space
-            docker image prune -f
-
-            # Optional: Run database migrations if applicable
-            # docker-compose run web alembic upgrade head
 
       - name: Run Database Migrations
         uses: appleboy/ssh-action@master
