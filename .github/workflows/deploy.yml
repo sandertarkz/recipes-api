@@ -48,6 +48,9 @@ jobs:
             # Log in to ECR on EC2 instance using IAM role credentials
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 401657292421.dkr.ecr.us-east-1.amazonaws.com
 
+            # Remove old images
+            docker image prune -a -f
+
             # Pull the latest image from ECR
             docker compose pull
 
