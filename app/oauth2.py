@@ -45,7 +45,7 @@ def get_current_user(
 ) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="Could not validate credentials ",
         headers={"WWW-Authenticate": "Bearer"},
     )
     token_data = decode_access_token(token, credentials_exception)
