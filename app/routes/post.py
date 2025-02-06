@@ -10,6 +10,8 @@ from app.models import (
 )
 from app.database import get_session
 from app.oauth2 import get_current_user
+from fastapi_pagination import Page, add_pagination, paginate
+
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
@@ -30,13 +32,13 @@ def create_post(
     return post_db
 
 
-@router.get("", response_model=List[PostPublic])
+@router.get("", response_model=Page[PostPublic])
 def get_posts(
     session: SessionDep,
     limit: int = 10,
     offset: int = 0,
     search: str | None = ""
-):
+) -> Page[PostPublic]:
     statement = select(Post)
 
     if search:
@@ -45,7 +47,7 @@ def get_posts(
     # Apply limit and offset
     statement = statement.limit(limit).offset(offset)
     posts = session.exec(statement)
-    return list(posts)
+    return paginate(list(posts))
 
 
 @router.get("/{id}", response_model=PostPublic)

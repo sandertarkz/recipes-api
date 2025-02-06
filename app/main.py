@@ -4,11 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 from app.database import get_session
 from app.routes import post, user, auth
+from fastapi_pagination import add_pagination
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
 app = FastAPI()
-
+add_pagination(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
