@@ -44,8 +44,6 @@ def get_posts(
     if search:
         statement = statement.where(col(Post.title).contains(search))
 
-    # Apply limit and offset
-    statement = statement.limit(limit).offset(offset)
     posts = session.exec(statement)
     return paginate(list(posts))
 
