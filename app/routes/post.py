@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlmodel import Session, col, select
 from app.models import (
@@ -10,7 +10,7 @@ from app.models import (
 )
 from app.database import get_session
 from app.oauth2 import get_current_user
-from fastapi_pagination import Page, add_pagination, paginate
+from fastapi_pagination import Page, paginate
 
 
 
