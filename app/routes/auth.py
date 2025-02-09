@@ -20,12 +20,12 @@ def create_user(user_credentials: UserLogin, session: SessionDep):
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials")
+            detail={"password": "Invalid credentials"})
 
     if not verify_password(user_credentials.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials")
+            detail={"password": "Invalid credentials"})
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data=TokenData(id=user.id), expires_delta=access_token_expires
