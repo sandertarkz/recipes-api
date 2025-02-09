@@ -23,9 +23,9 @@ def create_user(user: UserCreate, session: SessionDep):
         session.rollback()
         # Check if the error is due to the unique constraint on email
         if 'email' in str(e.orig):
-            raise HTTPException(status_code=400, detail="Email already registered")
+            raise HTTPException(status_code=400, email="Email already registered")
         elif 'username' in str(e.orig):
-            raise HTTPException(status_code=400, detail="Username already taken")
+            raise HTTPException(status_code=400, username="Username already taken")
         else:
             # Re-raise the exception if it's a different IntegrityError
             raise
